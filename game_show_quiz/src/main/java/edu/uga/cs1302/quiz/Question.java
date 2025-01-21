@@ -1,0 +1,48 @@
+package edu.uga.cs1302.quiz;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
+public class Question
+{
+    private Country country;
+    private List<String> choices;
+
+    public Question(Country country, List<String> continents)
+    {
+	this.country = country;
+	this.choices = new ArrayList<>();
+	this.choices.add(country.getContinent());
+
+	// Randomly selects continents
+	Random random = new Random();
+	while(this.choices.size() < 3)
+	    {
+		String randomContinent = continents.get(random.nextInt(continents.size()));
+		if (!this.choices.contains(randomContinent))
+		    {
+			this.choices.add(randomContinent);
+		    }
+	    }
+	Collections.shuffle(this.choices);
+    }
+
+    public Country getCountry()
+    {
+	return country;
+    }
+
+    public List<String> getChoices()
+    {
+	return choices;
+    }
+
+    // Override of the toString method to return the question to be asked, as well as the choices given
+    @Override
+    public String toString()
+    {
+	return "On which continent is " + country.getName() + " located?\n" + "Choices: " + choices;
+    }
+}

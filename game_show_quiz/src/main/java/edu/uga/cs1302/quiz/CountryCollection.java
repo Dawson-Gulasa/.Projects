@@ -1,0 +1,58 @@
+package edu.uga.cs1302.quiz;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.io.Reader;
+import java.io.FileReader;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.csv.CSVParser;
+
+public class CountryCollection
+{
+    // initiate list
+    private List<Country> countries;
+
+    public CountryCollection()
+    {
+	this.countries = new ArrayList<>();
+    }
+
+    // Reading from CSV file 
+    public void readFromCSV(String filepath) throws Exception
+    {
+	Reader reader = new FileReader(filepath);
+        Iterable<CSVRecord> records = CSVFormat.DEFAULT.parse(reader);
+	for(CSVRecord record : records)
+	    {
+		String name = record.get(0);
+		String continent = record.get(1);
+		countries.add(new Country(name, continent));
+	    }
+    }
+
+    // getter method
+    public Country getCountry(int index)
+    {
+	return countries.get(index);
+    }
+
+    // size method
+    public int size()
+    {
+	return countries.size();
+    }
+
+    // Override of toString method
+    @Override
+    public String toString()
+    {
+	StringBuilder sb = new StringBuilder();
+	for(Country country : countries)
+	    {
+		sb.append(country.toString()).append("\n");
+	    }
+	return sb.toString();
+    }
+}

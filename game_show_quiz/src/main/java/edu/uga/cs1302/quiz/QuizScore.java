@@ -1,0 +1,25 @@
+package edu.uga.cs1302.quiz;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class QuizScore implements Serializable
+{
+    private Date date;
+    private int score;
+
+    public QuizScore(Date date, int score)
+    {
+	this.date = date;
+	this.score = score;
+    }
+
+    //override of toString method
+    @Override
+    public String toString()
+    {
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	return "Date: " + sdf.format(date) + ", Score: " + score + " out of 6";
+    }
+}
