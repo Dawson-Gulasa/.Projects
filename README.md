@@ -1,6 +1,4 @@
-# C Projects
-
-## Snake Game
+## C-Based Snake Game
 
 **Snake.c**: This project is a simple implementation of the classic Snake Game written in C. The game runs in the terminal and utilizes basic input/output and system functions to:
 
