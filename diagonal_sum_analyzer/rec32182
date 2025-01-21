@@ -1,0 +1,116 @@
+project5:
+total 16
+-rw-r--r--. 1 myid 1828 Jul 23 13:06 pom.xml
+-rw-r--r--. 1 myid 1659 Jul 21 13:54 pom.xml~
+-rw-r--r--. 1 myid  665 Jul 29 10:08 quiz_results.dat
+-rw-r--r--. 1 myid  339 Jul 23 14:29 README.txt
+-rw-r--r--. 1 myid    0 Jul 29 10:09 rec32182
+drwxr-xr-x. 3 myid   26 Jul 21 13:39 src
+drwxr-xr-x. 5 myid   82 Jul 21 13:49 target
+
+project5/src:
+total 0
+drwxr-xr-x. 4 myid 47 Jul 22 13:42 main
+
+project5/src/main:
+total 0
+drwxr-xr-x. 3 myid 25 Jul 21 13:50 java
+drwxr-xr-x. 2 myid 35 Jul 22 13:44 resources
+
+project5/src/main/java:
+total 0
+drwxr-xr-x. 3 myid 25 Jul 21 13:39 edu
+
+project5/src/main/java/edu:
+total 0
+drwxr-xr-x. 3 myid 28 Jul 21 13:39 uga
+
+project5/src/main/java/edu/uga:
+total 0
+drwxr-xr-x. 3 myid 26 Jul 21 13:39 cs1302
+
+project5/src/main/java/edu/uga/cs1302:
+total 4
+drwxr-xr-x. 2 myid 4096 Jul 29 10:07 quiz
+
+project5/src/main/java/edu/uga/cs1302/quiz:
+total 72
+-rw-r--r--. 1 myid 1244 Jul 29 09:56 CountryCollection.java
+-rw-r--r--. 1 myid 1118 Jul 23 13:21 CountryCollection.java~
+-rw-r--r--. 1 myid  546 Jul 29 09:58 Country.java
+-rw-r--r--. 1 myid  441 Jul 21 14:00 Country.java~
+-rw-r--r--. 1 myid 6048 Jul 29 10:02 GeographyQuiz.java
+-rw-r--r--. 1 myid 5523 Jul 24 10:11 GeographyQuiz.java~
+-rw-r--r--. 1 myid 1112 Jul 29 10:03 Question.java
+-rw-r--r--. 1 myid  976 Jul 23 14:16 Question.java~
+-rw-r--r--. 1 myid 1631 Jul 29 10:05 Quiz.java
+-rw-r--r--. 1 myid 1475 Jul 23 14:15 Quiz.java~
+-rw-r--r--. 1 myid 1295 Jul 29 10:06 QuizResult.java
+-rw-r--r--. 1 myid 1190 Jul 22 13:40 QuizResult.java~
+-rw-r--r--. 1 myid  543 Jul 29 10:07 QuizScore.java
+-rw-r--r--. 1 myid  509 Jul 22 13:29 QuizScore.java~
+-rw-r--r--. 1 myid  411 Jul 21 14:34 TestCountryCollection.java
+-rw-r--r--. 1 myid  381 Jul 21 14:15 TestCountryCollection.java~
+
+project5/src/main/resources:
+total 4
+-rw-r--r--. 1 myid 3384 Jul 22 13:44 country_continent.csv
+
+project5/target:
+total 0
+drwxr-xr-x. 3 myid 46 Jul 22 13:44 classes
+drwxr-xr-x. 3 myid 33 Jul 21 13:49 generated-sources
+drwxr-xr-x. 3 myid 43 Jul 21 13:49 maven-status
+
+project5/target/classes:
+total 4
+-rw-r--r--. 1 myid 3384 Jul 22 13:44 country_continent.csv
+drwxr-xr-x. 3 myid   17 Jul 21 13:49 edu
+
+project5/target/classes/edu:
+total 0
+drwxr-xr-x. 3 myid 28 Jul 21 13:49 uga
+
+project5/target/classes/edu/uga:
+total 0
+drwxr-xr-x. 3 myid 26 Jul 21 13:49 cs1302
+
+project5/target/classes/edu/uga/cs1302:
+total 0
+drwxr-xr-x. 2 myid 243 Jul 29 10:07 quiz
+
+project5/target/classes/edu/uga/cs1302/quiz:
+total 40
+-rw-r--r--. 1 myid 1166 Jul 29 10:07 Country.class
+-rw-r--r--. 1 myid 2377 Jul 29 10:07 CountryCollection.class
+-rw-r--r--. 1 myid 9912 Jul 29 10:07 GeographyQuiz.class
+-rw-r--r--. 1 myid 2208 Jul 29 10:07 Question.class
+-rw-r--r--. 1 myid 2979 Jul 29 10:07 Quiz.class
+-rw-r--r--. 1 myid 2673 Jul 29 10:07 QuizResult.class
+-rw-r--r--. 1 myid 1250 Jul 29 10:07 QuizScore.class
+-rw-r--r--. 1 myid 1131 Jul 29 10:07 TestCountryCollection.class
+
+project5/target/generated-sources:
+total 0
+drwxr-xr-x. 2 myid 10 Jul 21 13:49 annotations
+
+project5/target/generated-sources/annotations:
+total 0
+
+project5/target/maven-status:
+total 0
+drwxr-xr-x. 3 myid 29 Jul 21 13:49 maven-compiler-plugin
+
+project5/target/maven-status/maven-compiler-plugin:
+total 0
+drwxr-xr-x. 3 myid 37 Jul 21 13:49 compile
+
+project5/target/maven-status/maven-compiler-plugin/compile:
+total 0
+drwxr-xr-x. 2 myid 64 Jul 21 13:49 default-compile
+
+project5/target/maven-status/maven-compiler-plugin/compile/default-compile:
+total 8
+-rw-r--r--. 1 myid 305 Jul 29 10:07 createdFiles.lst
+-rw-r--r--. 1 myid 697 Jul 23 09:10 inputFiles.lst
+/home/myid/djg58388/cs1302/project5:/home/myid/csci-1302a
