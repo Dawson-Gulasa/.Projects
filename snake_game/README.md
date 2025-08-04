@@ -1,36 +1,72 @@
-## C-Based Snake Game
+# Snake Game in C
 
-**Snake.c**: This project is a simple implementation of the classic Snake Game written in C. The game runs in the terminal and utilizes basic input/output and system functions to:
+## Project Overview
 
-- Display the game board.
-- Control the snake's movements.
-- Track the score.
+This console-based Snake game is implemented in C for Windows environments. Players control the snake to consume fruits, grow in length, and avoid collisions with walls or the snake’s own tail. The game demonstrates basic game-loop logic, real-time input handling, and dynamic board rendering.
 
-### Game Description
+## Prerequisites
 
-In the game, the player controls a snake that moves around the screen, trying to eat fruits (`*`) while avoiding walls and its own tail. The snake grows longer each time it eats a fruit, and the player's score increases. The game ends if the snake hits a wall or its own tail.
+- Windows OS
+- C compiler supporting `<conio.h>` and `<windows.h>` (e.g., MinGW GCC or Microsoft Visual C++)
 
-### Key Functions
+## Directory Layout
 
-- **`setup()`**: Initializes the game state, including the snake's starting position and the location of the first fruit.
+```
+snake_game/
+├── snake.c      # Source code for the Snake game
+└── README.md    # Project documentation (this file)
+```
 
-- **`MakeBoard()`**: Clears the screen and prints the game board, including walls, the snake, and the fruit.
+## Building the Game
 
-- **`input()`**: Handles user input for moving the snake and quitting the game.
+### Using MinGW GCC
 
-- **`logic()`**: Implements the game logic:
-  - Updates the snake's position and moves the tail.
-  - Detects collisions with walls and the snake’s own tail.
-  - Checks if the snake has eaten the fruit; if so, increases the score and length of the snake.
+1. Open Command Prompt and navigate to the `snake_game` directory:
+   ```batch
+   cd path\to\snake_game
+   ```
+2. Compile the source file:
+   ```batch
+   gcc snake.c -o snake.exe
+   ```
 
-- **`main()`**: The main game loop. It calls `MakeBoard()`, `input()`, and `logic()` repeatedly until the game is over.
+### Using Microsoft Visual C++ (cl)
 
-### Game Features
+1. Open the "Developer Command Prompt for VS" and navigate to the project folder:
+   ```batch
+   cd path\to\snake_game
+   ```
+2. Compile with:
+   ```batch
+   cl snake.c
+   ```
 
-- **Random Fruit Generation**: Fruits are placed randomly within the game board using the `rand()` function.
+## Running the Game
 
-- **Snake Movement**: The snake’s direction changes based on user input, and the body of the snake follows the head.
+1. Run the executable:
+   ```batch
+   snake.exe
+   ```
+2. Controls:
+   - **W**: Move up
+   - **A**: Move left
+   - **S**: Move down
+   - **D**: Move right
+   - **X**: Exit game
 
-- **Collision Detection**: The game ends when the snake collides with the boundary of the game board or its own body.
+3. Objective:
+   - Collect `*` fruits to increase score by 10 and grow the snake.
+   - Avoid colliding with `#` walls or your own `o` tail.
 
-- **Score Tracking**: The player's score increases by 10 points each time the snake eats a fruit.
+## How It Works
+
+- **Game Loop**: Continuously renders the board, processes input, and updates game logic until a collision or exit command.
+- **Board Rendering**: Uses `system("cls")` to clear the console and prints borders, the snake head (`0`), tail (`o`), and fruit (`*`).
+- **Input Handling**: Non-blocking input via `kbhit()` and `getch()` from `<conio.h>`.
+- **Logic**: Updates snake position, manages tail coordinates, checks for collisions, and respawns fruits at random positions.
+
+## Author
+
+Dawson Gulasa
+
+*Explore more projects and source code on [GitHub](https://github.com/yourusername).*
