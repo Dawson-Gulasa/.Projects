@@ -70,4 +70,3 @@ Dawson Gulasa
 
 ---
 
-*For additional projects and source code, visit [github.com/yourusername](https://github.com/yourusername).*
