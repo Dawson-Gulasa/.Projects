@@ -108,5 +108,5 @@ python3 tests/switchTest.py
 ## Author
 
 Dawson Gulasa  
-*Explore more projects at [github.com/yourusername](https://github.com/yourusername).*
+
 
