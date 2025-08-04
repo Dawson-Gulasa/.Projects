@@ -1,39 +1,73 @@
-# Project 4: Compilation and Execution Instructions
+# Diagonal Sum Analyzer for Large Matrices
 
-## Name: Dawson Gulasa
+## Project Overview
 
-### How to Compile the Program(s):
-1. Ensure the following files are in the current working directory:
-   - `proj4.c`
-   - `main.c`
-   - `proj4.h`
-   - The provided `MakeFile`
-2. Ensure `examples.tar.gz` is in the current working directory and extract it by running:
-   ```bash
-   tar -xvf examples.tar.gz
-   ```
-3. Compile the program by running:
-   ```bash
-   make
-   ```
+This C-based utility computes the sums of the main and secondary diagonals for large \(n \times n\) matrices. It demonstrates efficient memory management, parallel computation with pthreads, and optimized sliding-window algorithms for sub-diagonal searches.
 
-### How to Run the Program(s):
-1. Ensure all the source files have been compiled.
-2. Run the program using the following command:
-   ```bash
-   ./proj4.out [input_grid] [output_grid] [desired_sum] [thread(s)]
-   ```
-   - **[input_grid]**: The file containing a number grid to compute diagonal sums.
-   - **[output_grid]**: The file where the program will output the diagonal sums grid.
-   - **[desired_sum]**: The desired diagonal sums to locate/compute.
-   - **[thread(s)]**: The number of threads (1-3) you want the program to use.
+## Prerequisites
 
-3. To test the program's output against a correct output file, append the following command:
-   ```bash
-   diff [output_grid] [correctOut#.txt] | wc -c
-   ```
+- A C compiler supporting C11 (e.g., `gcc`)
+- POSIX threads library (`-lpthread`)
+- Make utility for automated build
 
-### Performance Insight:
-**Why does using 3 threads compute diagonal sums slower than 2 threads on smaller grids?**
-- On smaller grids, the computational tasks are too trivial to benefit from multithreading. The overhead introduced by creating and managing additional threads outweighs any potential speed gains from parallel execution, leading to slower overall performance when using more threads.
+## Directory Layout
 
+```
+diagonal_sum_analyzer/
+├── Makefile            # Build script
+├── main.c              # Entry point; parses arguments and orchestrates computation
+├── proj4.c             # Implementation of diagonal-sum algorithms
+├── proj4.h             # Header definitions for proj4.c
+├── examples/           # Sample inputs and expected outputs
+│   ├── matrix1.in      # Example input: whitespace-delimited matrix
+│   ├── matrix1.out     # Corresponding expected diagonal sums
+│   └── ...             # Additional test cases
+└── README.md           # Project documentation (this file)
+```
+
+## Build Instructions
+
+From the `diagonal_sum_analyzer/` root directory, run:
+
+```bash
+make
+```
+
+This will produce the executable `diag_sum`.
+
+## Usage
+
+```bash
+./diag_sum <input_file>
+```
+
+- `<input_file>`: Path to a text file containing an \(n \times n\) whitespace-delimited matrix.
+
+### Example
+
+```bash
+./diag_sum examples/matrix1.in
+# Output (stdout):
+# Main diagonal sum: 15
+# Secondary diagonal sum: 15
+```
+
+## Running Tests
+
+To verify against all provided examples, you can script:
+
+```bash
+for f in examples/*.in; do
+  echo "Testing $f"
+  ./diag_sum "$f" | diff - examples/$(basename "$f" .in).out
+  echo
+  done
+```
+
+## Author
+
+Dawson Gulasa
+
+---
+
+*For additional projects and source code, visit [github.com/yourusername](https://github.com/yourusername).*
