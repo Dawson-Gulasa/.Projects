@@ -69,4 +69,3 @@ snake_game/
 
 Dawson Gulasa
 
-*Explore more projects and source code on [GitHub](https://github.com/yourusername).*
