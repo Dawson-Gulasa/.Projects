@@ -19,8 +19,8 @@ diagonal_sum_analyzer/
 ├── proj4.c             # Implementation of diagonal-sum algorithms
 ├── proj4.h             # Header definitions for proj4.c
 ├── examples/           # Sample inputs and expected outputs
-│   ├── matrix1.in      # Example input: whitespace-delimited matrix
-│   ├── matrix1.out     # Corresponding expected diagonal sums
+│   ├── in1.txt         # Example input: whitespace-delimited matrix
+│   ├── correctOut1.txt # Corresponding expected diagonal sums
 │   └── ...             # Additional test cases
 └── README.md           # Project documentation (this file)
 ```
