@@ -6,12 +6,13 @@ A curated collection of my academic and research projects demonstrating skills i
 
 ```text
 /
-├── audio_tracking_autonomous_car/  # Autonomous audio-tracking vehicle on Raspberry Pi 4
-├── diagonal_sum_analyzer/         # C tool for computing diagonal sums in large matrices (parallelized)
-├── game_show_quiz/                # JavaFX-based interactive geography quiz application
-├── snake_game/                    # Console-based Snake game implemented in C
-├── research_assistant/            # Comprehensive research memo from Summer Research Assistant role
-└── README.md                      # This file
+├── audio_tracking_autonomous_car/        # Autonomous audio-tracking vehicle on Raspberry Pi 4
+├── reaction_time_training_button/        # Reaction-time training button system (Pico + sensors + OLED + IoT)
+├── diagonal_sum_analyzer/               # C tool for computing diagonal sums in large matrices (parallelized)
+├── game_show_quiz/                      # JavaFX-based interactive geography quiz application
+├── snake_game/                          # Console-based Snake game implemented in C
+├── research_assistant/                  # Comprehensive research memo from Summer Research Assistant role
+└── README.md                            # This file
 ```
 
 ## Getting Started
@@ -33,6 +34,9 @@ To explore any project:
 
 - **audio_tracking_autonomous_car/**  
   Python-driven Raspberry Pi vehicle that seeks specified audio frequencies and executes navigational maneuvers.  
+
+- **reaction_time_training_button/**  
+  Battery-powered reaction-time training system using a Raspberry Pi Pico, FSR-based input, SSD1306 OLED UI, and optional ThingSpeak uploads for logging/leaderboard use.  
 
 - **diagonal_sum_analyzer/**  
   Performance-optimized C program using pthreads and sliding-window algorithms to compute main and secondary diagonal sums of \(n\times n\) matrices.  
