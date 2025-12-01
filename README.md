@@ -8,11 +8,11 @@ A curated collection of my academic and research projects demonstrating skills i
 /
 ├── audio_tracking_autonomous_car/        # Autonomous audio-tracking vehicle on Raspberry Pi 4
 ├── reaction_time_training_button/        # Reaction-time training button system (Pico + sensors + OLED + IoT)
-├── diagonal_sum_analyzer/               # C tool for computing diagonal sums in large matrices (parallelized)
-├── game_show_quiz/                      # JavaFX-based interactive geography quiz application
-├── snake_game/                          # Console-based Snake game implemented in C
-├── research_assistant/                  # Comprehensive research memo from Summer Research Assistant role
-└── README.md                            # This file
+├── diagonal_sum_analyzer/                # C tool for computing diagonal sums in large matrices (parallelized)
+├── game_show_quiz/                       # JavaFX-based interactive geography quiz application
+├── snake_game/                           # Console-based Snake game implemented in C
+├── Research_Documentation/               # Comprehensive research memo from Summer Research Assistant role
+└── README.md                             # This file
 ```
 
 ## Getting Started
