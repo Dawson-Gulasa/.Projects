@@ -21,7 +21,6 @@ research_assistant/
 
 1. Open `Research_Memo.pdf` to review the end‑to‑end documentation of the project.  
 2. Follow the embedded sections for code, hardware setup, and demonstration videos.  
-3. For direct access to individual scripts, datasets, and example outputs, please refer to the respective project subdirectories in the main repository (e.g., `audio_tracking_autonomous_car/`, `javafx_game_show_quiz/`, etc.).
 
 ---
 
