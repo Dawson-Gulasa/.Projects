@@ -206,27 +206,124 @@ The design functioned correctly in hardware, although the final implementation d
 ```text
 optimus_prime_fpga/
 ├── README.md
-├── rtl/
-│   ├── top/
-│   ├── prime_engine/
-│   ├── input/
-│   ├── mouse/
-│   ├── sd_card/
-│   ├── memory/
-│   ├── ui/
-│   ├── common/
-│   └── legacy/
-├── sim/
-├── mem/
-├── constraints/
-├── ip/
-│   ├── mig/
-│   └── pll/
-├── docs/
+│
+├── rtl/                                  # Synthesizable Verilog design
+│   ├── top/                              # Top-level system integration
+│   │   └── top.v
+│   │
+│   ├── prime_engine/                     # Prime computation + storage
+│   │   ├── prime_check_core.v
+│   │   ├── prime_controller.v
+│   │   ├── prime_subsystem.v
+│   │   ├── prime_storage_frontend.v
+│   │   ├── prime_storage_mem.v
+│   │   └── prime_ddr_bridge.v
+│   │
+│   ├── input/                            # Keypad + pushbutton handling
+│   │   ├── input_ctrl.v
+│   │   ├── param_entry.v
+│   │   ├── keypad_input_ctrl.v
+│   │   ├── keypad_debounce.v
+│   │   ├── key_decoder.v
+│   │   ├── col_scanner.v
+│   │   ├── btn_input_ctrl.v
+│   │   └── debounce_1bit.v
+│   │
+│   ├── mouse/                            # PS/2 mouse + cursor control
+│   │   ├── mouse_subsystem.v
+│   │   ├── mouse_ps2_ctrl.v
+│   │   ├── mouse_packet_decoder.v
+│   │   ├── mouse_cursor_ctrl.v
+│   │   ├── mouse_cursor_cdc.v
+│   │   ├── ps2_rx.v
+│   │   └── ps2_tx.v
+│   │
+│   ├── sd_card/                          # SD reader + Test Mode data path
+│   │   ├── sd_file_byte_source.v
+│   │   ├── sd_file_reader.v
+│   │   ├── sd_reader.v
+│   │   ├── sdcmd_ctrl.v
+│   │   ├── sd_byte_sync.v
+│   │   ├── sd_prime_parser.v
+│   │   ├── sd_prime_feeder.v
+│   │   └── test_mode_ctrl.v
+│   │
+│   ├── memory/                           # DDR2 framebuffer + CDC logic
+│   │   ├── ddr2_fb_ctrl.v
+│   │   ├── ddr2_fb_engine.v
+│   │   ├── ddr2_fb_cdc.v
+│   │   ├── ddr2_fb_swap_ctrl.v
+│   │   ├── ddr2_fb_write_latch.v
+│   │   └── frame_renderer_cdc.v
+│   │
+│   ├── ui/                               # VGA UI, rendering + sprites
+│   │   ├── ui_fsm.v
+│   │   ├── ui_frame_renderer.v
+│   │   ├── screen_mux.v
+│   │   ├── screen_menu.v
+│   │   ├── screen_params.v
+│   │   ├── screen_generating.v
+│   │   ├── screen_results_error_test.v
+│   │   ├── screen_controls.v
+│   │   ├── sprite_ctrl.v
+│   │   ├── cursor_overlay.v
+│   │   ├── vga_output_with_cursor.v
+│   │   ├── font_rom_ascii.v
+│   │   ├── logo_rom.v
+│   │   ├── autobot_rom.v
+│   │   └── bin2bcd_seq.v
+│   │
+│   ├── common/                           # Shared timing + CDC utilities
+│   │   ├── sync_ff.v
+│   │   ├── tick_gen.v
+│   │   ├── async_fifo.v
+│   │   ├── pulse_sync.v
+│   │   └── vga_output.v
+│   │
+│   └── legacy/                           # Earlier development implementation
+│       └── sd_prime_cache.v
+│
+├── sim/                                  # Self-checking testbenches
+│   ├── tb_prime_check_core.v
+│   ├── tb_prime_controller.v
+│   ├── tb_prime_ddr_storage.v
+│   ├── tb_prime_subsystem.v
+│   ├── tb_sd_prime_parser.v
+│   ├── tb_sd_prime_feeder.v
+│   ├── tb_test_mode_ctrl.v
+│   ├── tb_input_ctrl.v
+│   ├── tb_mouse_subsystem.v
+│   ├── tb_vga_output_with_cursor.v
+│   └── tb_top_smoke.v
+│
+├── mem/                                  # ROM initialization data
+│   ├── char_rom_8x16.mem
+│   ├── cursor_dot_16x16.mem
+│   └── font_rom_ascii.mem
+│
+├── constraints/                          # Nexys A7 pin constraints
+│   └── Nexys-A7-100T-Master.xdc
+│
+├── ip/                                   # Xilinx Vivado IP configuration
+│   ├── mig/                              # DDR2 Memory Interface Generator
+│   │   ├── mig.xci
+│   │   └── mig_a.prj
+│   │
+│   └── pll/                              # Clocking Wizard / PLL
+│       └── pll.xci
+│
+├── docs/                                 # Full project documentation
 │   └── Optimus_Prime_Final_Report.pdf
-└── media/
+│
+└── media/                                # Project media
     ├── demo_video/
-    └── screenshots/
+    │   └── README.md                     # Link to full hardware demo
+    │
+    └── screenshots/                      # Final VGA interface screenshots
+        ├── main_menu.png
+        ├── generating.png
+        ├── results.png
+        └── test_mode.png
 ```
 
 ---
