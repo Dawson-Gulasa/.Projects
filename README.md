@@ -7,6 +7,7 @@ A curated collection of my academic and research projects demonstrating skills i
 ```text
 /
 ├── audio_tracking_autonomous_car/        # Autonomous audio-tracking vehicle on Raspberry Pi 4
+├── optimus_prime_fpga/                   # Nexys A7 FPGA system with VGA UI, DDR2, SD card, and prime verification
 ├── reaction_time_training_button/        # Reaction-time training button system (Pico + sensors + OLED + IoT)
 ├── diagonal_sum_analyzer/                # C tool for computing diagonal sums in large matrices (parallelized)
 ├── game_show_quiz/                       # JavaFX-based interactive geography quiz application
@@ -33,7 +34,10 @@ To explore any project:
 ## Projects at a Glance
 
 - **audio_tracking_autonomous_car/**  
-  Python-driven Raspberry Pi vehicle that seeks specified audio frequencies and executes navigational maneuvers.  
+  Python-driven Raspberry Pi vehicle that seeks specified audio frequencies and executes navigational maneuvers.
+  
+- **optimus_prime_fpga/**  
+  Verilog-based Nexys A7 FPGA system featuring four prime-computation modes, a mouse/keypad-controlled VGA interface, DDR2 framebuffer and prime storage, SD-card verification, multiple clock domains, and self-checking RTL testbenches.  
 
 - **reaction_time_training_button/**  
   Battery-powered reaction-time training system using a Raspberry Pi Pico, FSR-based input, SSD1306 OLED UI, and optional ThingSpeak uploads for logging/leaderboard use.  
