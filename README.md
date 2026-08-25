@@ -40,7 +40,7 @@ To explore any project:
 - **optimus_prime_fpga/**  
   Verilog-based Nexys A7 FPGA system featuring four prime-computation modes, a mouse/keypad-controlled VGA interface, DDR2 framebuffer and prime storage, SD-card verification, multiple clock domains, and self-checking RTL testbenches.
 
-- **ssd_clock_timer/**
+- **ssd_clock_timer/**  
   Raspberry Pi–driven multi-mode clock (IDLE/AUTO/MANUAL) built on DFF-latched seven-segment displays and a matrix keypad, featuring a custom calibrated busy-loop timing function benchmarked against time.sleep() over a 2-hour accuracy test.
 
 - **reaction_time_training_button/**  
