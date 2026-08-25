@@ -8,6 +8,7 @@ A curated collection of my academic and research projects demonstrating skills i
 /
 ├── audio_tracking_autonomous_car/        # Autonomous audio-tracking vehicle on Raspberry Pi 4
 ├── optimus_prime_fpga/                   # Nexys A7 FPGA system with VGA UI, DDR2, SD card, and prime verification
+├── ssd_clock_timer/                      # Raspberry Pi seven-segment display clock with calibrated software timing
 ├── reaction_time_training_button/        # Reaction-time training button system (Pico + sensors + OLED + IoT)
 ├── diagonal_sum_analyzer/                # C tool for computing diagonal sums in large matrices (parallelized)
 ├── game_show_quiz/                       # JavaFX-based interactive geography quiz application
@@ -37,7 +38,10 @@ To explore any project:
   Python-driven Raspberry Pi vehicle that seeks specified audio frequencies and executes navigational maneuvers.
   
 - **optimus_prime_fpga/**  
-  Verilog-based Nexys A7 FPGA system featuring four prime-computation modes, a mouse/keypad-controlled VGA interface, DDR2 framebuffer and prime storage, SD-card verification, multiple clock domains, and self-checking RTL testbenches.  
+  Verilog-based Nexys A7 FPGA system featuring four prime-computation modes, a mouse/keypad-controlled VGA interface, DDR2 framebuffer and prime storage, SD-card verification, multiple clock domains, and self-checking RTL testbenches.
+
+- **ssd_clock_timer/**
+  Raspberry Pi–driven multi-mode clock (IDLE/AUTO/MANUAL) built on DFF-latched seven-segment displays and a matrix keypad, featuring a custom calibrated busy-loop timing function benchmarked against time.sleep() over a 2-hour accuracy test.
 
 - **reaction_time_training_button/**  
   Battery-powered reaction-time training system using a Raspberry Pi Pico, FSR-based input, SSD1306 OLED UI, and optional ThingSpeak uploads for logging/leaderboard use.  
