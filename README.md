@@ -34,6 +34,11 @@ To explore any project:
 
 ## Projects at a Glance
 
+### Featured: 32-bit Verilog SCC Processor
+
+**[Explore the SCC processor project](SCC_32bit_Processor/)** — Custom 32-bit processor with register/ALU/branch logic, microcoded signed multiplication and division, 16-word PUSH/POP stack, and automated Icarus Verilog verification. Final CP6 submission: **20/20 internal regression tests** and **9/9 deliberately injected faults detected**.
+
+
 - **audio_tracking_autonomous_car/**  
   Python-driven Raspberry Pi vehicle that seeks specified audio frequencies and executes navigational maneuvers.
   

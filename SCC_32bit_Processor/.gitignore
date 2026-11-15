@@ -1,0 +1,12 @@
+*.vcd
+*.vvp
+*.log
+**/results_*/
+**/make_build/
+**/__pycache__/
+*.pyc
+processor/output.mem
+processor/output.lst
+processor/scc_out.txt
+# Keep processor/ucode.mem and processor/div_ucode.mem.
+# Keep processor/verification/golden/*.csv.
