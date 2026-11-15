@@ -1,0 +1,1433 @@
+; Group 4 receipt calculator, ISA F2026.3.
+; Standalone program: all input, output initialization and expected data included.
+; Prices/quantities are nonnegative; accepted amounts are 0..0x7fffffff cents.
+; Code begins at ORG 0 after the data tables below.
+;
+; Input  0x1000: 9 records x 5 words: quantityA, priceA, quantityB, priceB, fee.
+; Output 0x2000: 9 records x 0x100 bytes. Record offsets:
+;   00/04 = product A low/high; 08/0C = product B low/high
+;   10 = raw total; 14 = status (0=OK, 1=sum overflow, 2=fee overflow, 3=product)
+;   18 = stack-pointer delta; 1C = completed formatter returns (3 or 0)
+;   20/60/A0 = item A/item B/total strings, 16 word characters per slot
+;   E0/E4 = subtotal/fee ADDS flags; remaining words zero
+; Strings: one ASCII character per 32-bit word, followed by zero.
+; 0x2E00 = OVERFLOW string; 0x3000 = expected result records.
+; Globals at 0x2F00: initial SP; +04 mismatches; +08 verdict (600D/BAD);
+;   +0C receipts completed; +10 formatter calls; +14 final SP delta.
+; Do not modify R13 directly or use R12 as a MUL/DIV destination.
+
+    ORG #0x1000
+; Case 0: ordinary
+    FCB #0x3
+    FCB #0x9C3
+    FCB #0x2
+    FCB #0x1C2
+    FCB #0x0
+; Case 1: zero quantities
+    FCB #0x0
+    FCB #0x9C3
+    FCB #0x0
+    FCB #0x1C2
+    FCB #0x0
+; Case 2: leading zero cents
+    FCB #0x1
+    FCB #0x4B5
+    FCB #0x0
+    FCB #0x3E7
+    FCB #0x0
+; Case 3: dollar carry and fee
+    FCB #0x2
+    FCB #0x4B
+    FCB #0x3
+    FCB #0x32
+    FCB #0x1
+; Case 4: maximum accepted cents
+    FCB #0x1
+    FCB #0x7FFFFFFF
+    FCB #0x0
+    FCB #0x1
+    FCB #0x0
+; Case 5: subtotal addition overflow
+    FCB #0x1
+    FCB #0x77359400
+    FCB #0x1
+    FCB #0x3B9ACA00
+    FCB #0x0
+; Case 6: handling fee overflow
+    FCB #0x1
+    FCB #0x7FFFFFF8
+    FCB #0x0
+    FCB #0x1
+    FCB #0x1
+; Case 7: product high word overflow
+    FCB #0x10000
+    FCB #0x10000
+    FCB #0x0
+    FCB #0x1
+    FCB #0x0
+; Case 8: product low sign overflow
+    FCB #0x3
+    FCB #0x3B9ACA00
+    FCB #0x0
+    FCB #0x1
+    FCB #0x0
+    ORG #0x2000
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    FCB #0xDEADBEEF
+    ORG #0x2E00
+    FCB #0x4F
+    FCB #0x56
+    FCB #0x45
+    FCB #0x52
+    FCB #0x46
+    FCB #0x4C
+    FCB #0x4F
+    FCB #0x57
+    FCB #0x0
+    ORG #0x2F00
+    FCB #0x0
+    FCB #0x0
+    FCB #0x0
+    FCB #0x0
+    FCB #0x0
+    FCB #0x0
+    ORG #0x3000
+    FCB #0x00001D49
+    FCB #0x00000000
+    FCB #0x00000384
+    FCB #0x00000000
+    FCB #0x000020CD
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000003
+    FCB #0x00000024
+    FCB #0x00000037
+    FCB #0x00000034
+    FCB #0x0000002E
+    FCB #0x00000039
+    FCB #0x00000037
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000024
+    FCB #0x00000039
+    FCB #0x0000002E
+    FCB #0x00000030
+    FCB #0x00000030
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000024
+    FCB #0x00000038
+    FCB #0x00000033
+    FCB #0x0000002E
+    FCB #0x00000039
+    FCB #0x00000037
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000003
+    FCB #0x00000024
+    FCB #0x00000030
+    FCB #0x0000002E
+    FCB #0x00000030
+    FCB #0x00000030
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000024
+    FCB #0x00000030
+    FCB #0x0000002E
+    FCB #0x00000030
+    FCB #0x00000030
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000024
+    FCB #0x00000030
+    FCB #0x0000002E
+    FCB #0x00000030
+    FCB #0x00000030
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000004
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x000004B5
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x000004B5
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000003
+    FCB #0x00000024
+    FCB #0x00000031
+    FCB #0x00000032
+    FCB #0x0000002E
+    FCB #0x00000030
+    FCB #0x00000035
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000024
+    FCB #0x00000030
+    FCB #0x0000002E
+    FCB #0x00000030
+    FCB #0x00000030
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000024
+    FCB #0x00000031
+    FCB #0x00000032
+    FCB #0x0000002E
+    FCB #0x00000030
+    FCB #0x00000035
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000096
+    FCB #0x00000000
+    FCB #0x00000096
+    FCB #0x00000000
+    FCB #0x00000145
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000003
+    FCB #0x00000024
+    FCB #0x00000031
+    FCB #0x0000002E
+    FCB #0x00000035
+    FCB #0x00000030
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000024
+    FCB #0x00000031
+    FCB #0x0000002E
+    FCB #0x00000035
+    FCB #0x00000030
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000024
+    FCB #0x00000033
+    FCB #0x0000002E
+    FCB #0x00000032
+    FCB #0x00000035
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x7FFFFFFF
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x7FFFFFFF
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000003
+    FCB #0x00000024
+    FCB #0x00000032
+    FCB #0x00000031
+    FCB #0x00000034
+    FCB #0x00000037
+    FCB #0x00000034
+    FCB #0x00000038
+    FCB #0x00000033
+    FCB #0x00000036
+    FCB #0x0000002E
+    FCB #0x00000034
+    FCB #0x00000037
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000024
+    FCB #0x00000030
+    FCB #0x0000002E
+    FCB #0x00000030
+    FCB #0x00000030
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000024
+    FCB #0x00000032
+    FCB #0x00000031
+    FCB #0x00000034
+    FCB #0x00000037
+    FCB #0x00000034
+    FCB #0x00000038
+    FCB #0x00000033
+    FCB #0x00000036
+    FCB #0x0000002E
+    FCB #0x00000034
+    FCB #0x00000037
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x77359400
+    FCB #0x00000000
+    FCB #0x3B9ACA00
+    FCB #0x00000000
+    FCB #0xB2D05E00
+    FCB #0x00000001
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x0000004F
+    FCB #0x00000056
+    FCB #0x00000045
+    FCB #0x00000052
+    FCB #0x00000046
+    FCB #0x0000004C
+    FCB #0x0000004F
+    FCB #0x00000057
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000009
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x7FFFFFF8
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x80000011
+    FCB #0x00000002
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x0000004F
+    FCB #0x00000056
+    FCB #0x00000045
+    FCB #0x00000052
+    FCB #0x00000046
+    FCB #0x0000004C
+    FCB #0x0000004F
+    FCB #0x00000057
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000009
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000001
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000003
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x0000004F
+    FCB #0x00000056
+    FCB #0x00000045
+    FCB #0x00000052
+    FCB #0x00000046
+    FCB #0x0000004C
+    FCB #0x0000004F
+    FCB #0x00000057
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0xB2D05E00
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000003
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x0000004F
+    FCB #0x00000056
+    FCB #0x00000045
+    FCB #0x00000052
+    FCB #0x00000046
+    FCB #0x0000004C
+    FCB #0x0000004F
+    FCB #0x00000057
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+    FCB #0x00000000
+
+; Group 4: two-item receipt calculator, ISA F2026.3.
+; All prices/amounts are integer cents. Accepted range: 0..0x7fffffff.
+; Input: 9 records at 0x1000, 5 words each (qtyA,priceA,qtyB,priceB,fee).
+; Output: 9 records at 0x2000, 0x100 bytes each; layout is documented above.
+; Input data and independently computed expected records are included above.
+
+    ORG #0x0
+start:
+    MOV R11, #0x2F00
+    STOR R13, R11             ; Capture the implementation's initial stack base.
+    MOV R7, #0x1000           ; Input record pointer; formatter preserves R7-R10.
+    MOV R8, #0x2000           ; Output record pointer.
+    MOV R9, #0x9              ; Remaining receipts.
+loop_receipts:
+    MOV R0, R8
+    MOV R1, #0x40
+clear_record:
+    STOR R14, R0
+    ADD R0, R0, #0x4
+    SUBS R1, R1, #0x1
+    B.ne clear_record
+
+    LOAD R0, R7
+    LOAD R1, R7, #0x4
+    MUL R2, R0, R1            ; Required microcoded multiplication in application.
+    STOR R2, R8
+    STOR R12, R8, #0x4        ; Check the high result as well as the low word.
+    LOAD R0, R7, #0x8
+    LOAD R1, R7, #0xC
+    MUL R3, R0, R1
+    STOR R3, R8, #0x8
+    STOR R12, R8, #0xC
+
+    LOAD R0, R8, #0x4
+    CMP R0, #0x0
+    B.ne product_overflow
+    CMP R12, #0x0
+    B.ne product_overflow
+    CMP R2, #0x0
+    B.mi product_overflow    ; High=0 is insufficient if low exceeds INT_MAX.
+    CMP R3, #0x0
+    B.mi product_overflow
+    ADDS R4, R2, R3
+    MOVF R5
+    STOR R5, R8, #0xE0       ; MOVF/STOR must preserve flags for B.VS.
+    B.vs sum_overflow
+    LOAD R6, R7, #0x10
+    CMP R6, #0x0
+    B.eq no_fee
+    ADDS R4, R4, #0x19       ; Optional fixed handling charge: 25 cents.
+    MOVF R5
+    STOR R5, R8, #0xE4
+    B.vs fee_overflow
+no_fee:
+    STOR R4, R8, #0x10
+
+    LOAD R0, R8
+    ADD R1, R8, #0x20
+    MOV R10, after_item_a     ; Explicit software return address.
+    B format_money
+after_item_a:
+    LOAD R0, R8, #0x8
+    ADD R1, R8, #0x60
+    MOV R10, after_item_b
+    B format_money
+after_item_b:
+    LOAD R0, R8, #0x10
+    ADD R1, R8, #0xA0
+    MOV R10, after_total
+    B format_money
+after_total:
+    MOV R0, #0x3
+    STOR R0, R8, #0x1C       ; All three distinct BR continuations completed.
+    B done_receipt
+
+sum_overflow:
+    STOR R4, R8, #0x10       ; Keep the raw wrapped sum for diagnosis.
+    MOV R0, #0x1
+    B overflow_message
+fee_overflow:
+    STOR R4, R8, #0x10
+    MOV R0, #0x2
+    B overflow_message
+product_overflow:
+    MOV R0, #0x3             ; Total stays zero; adding invalid products skipped.
+overflow_message:
+    STOR R0, R8, #0x14
+    MOV R0, #0x2E00
+    ADD R1, R8, #0xA0
+    MOV R2, #0x9             ; Copy word characters "OVERFLOW" and terminator.
+copy_overflow:
+    LOAD R3, R0
+    STOR R3, R1
+    ADD R0, R0, #0x4
+    ADD R1, R1, #0x4
+    SUBS R2, R2, #0x1
+    B.ne copy_overflow
+done_receipt:
+    MOV R11, #0x2F00
+    LOAD R0, R11
+    SUB R0, R13, R0
+    STOR R0, R8, #0x18       ; Zero proves the formatter left the stack balanced.
+    LOAD R0, R11, #0xC
+    ADD R0, R0, #0x1
+    STOR R0, R11, #0xC
+    ADD R7, R7, #0x14
+    ADD R8, R8, #0x100
+    SUBS R9, R9, #0x1
+    B.ne loop_receipts
+
+    ; Assembly verdict depends on all 576 result words, not just reaching HALT.
+    MOV R0, #0x2000
+    MOV R1, #0x3000
+    MOV R2, #0x240
+    CLR R3
+check_loop:
+    LOAD R4, R0
+    LOAD R5, R1
+    CMP R4, R5
+    B.eq word_ok
+    ADD R3, R3, #0x1
+word_ok:
+    ADD R0, R0, #0x4
+    ADD R1, R1, #0x4
+    SUBS R2, R2, #0x1
+    B.ne check_loop
+    MOV R11, #0x2F00
+    STOR R3, R11, #0x4
+    LOAD R4, R11
+    SUB R4, R13, R4
+    STOR R4, R11, #0x14
+    CMP R3, #0x0
+    B.ne fail
+    CMP R4, #0x0
+    B.ne fail
+    LOAD R4, R11, #0x10
+    CMP R4, #0xF             ; Five valid receipts, three helper calls each.
+    B.ne fail
+    LOAD R4, R11, #0xC
+    CMP R4, #0x9
+    B.ne fail
+    MOV R4, #0x600D
+    B verdict
+fail:
+    MOV R4, #0xBAD
+verdict:
+    STOR R4, R11, #0x8
+    HALT
+
+; format_money: R0=cents, R1=word-character output pointer, R10=return PC.
+; Clobbers R0-R6,R11,R12. Preserves R7-R10. Uses <=8 of 16 stack words.
+; Characters occupy one 32-bit word each, because the ISA has no byte store.
+format_money:
+    DIV R4, R0, #0x64        ; Dollars in R4; cents in R12.
+    MOV R5, R12              ; Preserve cents before another DIV overwrites R12.
+    MOV R3, #0x24            ; '$'
+    STOR R3, R1
+    ADD R1, R1, #0x4
+    CLR R2
+extract_digits:
+    DIV R4, R4, #0xA
+    PUSH R12                ; Least significant digit is extracted first.
+    ADD R2, R2, #0x1
+    CMP R4, #0x0
+    B.ne extract_digits     ; Runs once for zero dollars too.
+emit_digits:
+    POP R3                  ; Last extracted digit is displayed first.
+    OR R3, R3, #0x30        ; Digit 0..9 to ASCII '0'..'9'.
+    STOR R3, R1
+    ADD R1, R1, #0x4
+    SUBS R2, R2, #0x1
+    B.ne emit_digits
+    MOV R3, #0x2E            ; '.'
+    STOR R3, R1
+    ADD R1, R1, #0x4
+    DIV R6, R5, #0xA         ; Always output TWO cents digits, including zeros.
+    OR R6, R6, #0x30
+    STOR R6, R1
+    OR R3, R12, #0x30
+    STOR R3, R1, #0x4
+    STOR R14, R1, #0x8
+    MOV R11, #0x2F00
+    LOAD R2, R11, #0x10
+    ADD R2, R2, #0x1
+    STOR R2, R11, #0x10
+    BR R10                  ; Absolute address, with no automatic link register.
+
+    HALT                     ; Unreachable guard after BR.
