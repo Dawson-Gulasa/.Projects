@@ -34,4 +34,4 @@ The processor was a group project built across six checkpoints. The responsibili
 
 All materials are published under the stated academic portfolio redistribution permission with credit. No blanket project-wide reuse license is asserted for mixed-authorship code.
 
-**Source:** Group 4 *Checkpoint 6: SCC Project Complete* (Nov. 2, 2026), especially the team responsibilities table (p. 6), development schedule (pp. 18–23), and final ownership section (pp. 23–24).
+**Source:** [Group 4, *Checkpoint 6: SCC Project Complete*](Final_SCC_Report.pdf) (Nov. 2, 2026), especially the team responsibilities table (p. 6), development schedule (pp. 18–23), and final ownership section (pp. 23–24).
