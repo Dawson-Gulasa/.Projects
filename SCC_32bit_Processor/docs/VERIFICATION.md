@@ -8,7 +8,7 @@
 | `processor/verification/run_f26_demo.ps1 -Force` | **9/9 injected faults detected** | Selected classwide tests rejected deliberately corrupted processor behavior |
 | `processor/verification/run_f26_demo.ps1` | No new aggregate asserted | Normal classwide tests are retained for rerunning |
 
-These numbers come from Group 4's submitted checkpoint report. **This curated copy has not yet been independently simulated**. Detection of intentionally injected faults is not the same as nine normal program passes; 20 tests cannot prove the full ISA for all possible inputs.
+These numbers come from Group 4's [complete submitted checkpoint report](Final_SCC_Report.pdf). **This curated copy has not yet been independently simulated**. Detection of intentionally injected faults is not the same as nine normal program passes; 20 tests cannot prove the full ISA for all possible inputs.
 
 ## Exact reproduction commands
 
