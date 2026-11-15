@@ -98,6 +98,6 @@ SCC_32bit_Processor/
 
 ## Full report and provenance
 
-The [complete 121-page Group 4 CP6 report](https://github.com/Herring-UGACSEE-4290-F26/Group-Burger/blob/main/SCC/Final_SCC_Documentation/Group4_CP6_Report.pdf) remains in the original class repository. **Note:** that source repository is currently private, so the report link may require approved access; a public PDF copy is not yet included in this review branch.
+Read the [complete 121-page Group 4 CP6 final technical report](docs/Final_SCC_Report.pdf), included in this public portfolio repository. The original [Group 4 final CP6 source directory](https://github.com/Herring-UGACSEE-4290-F26/Group-Burger/tree/main/SCC/CP6-SCC_Complete) remains the authoritative class submission; access to that original repository may require permission.
 
 This portfolio project is a curated source distribution based on the [final Group 4 CP6 directory](https://github.com/Herring-UGACSEE-4290-F26/Group-Burger/tree/main/SCC/CP6-SCC_Complete). It retains the files referenced by the final internal and Fall 2026 test launchers while excluding historical snapshots and earlier-year external suites. Publication is with permission and attribution; no unrestricted project-wide license is asserted.
