@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 620" role="img" aria-label="SCC functional architecture showing fetch, decode, execute, memory, writeback, architectural registers, signed MUL/DIV, and PUSH/POP stack">
+  <defs>
+    <style>
+      .bg{fill:#071427}
+      .panel{fill:#0a1830}
+      .box{fill:#1c2f4d;stroke:#7aa4cf;stroke-width:2.2}
+      .accent{fill:#184759;stroke:#47d8d0;stroke-width:2.2}
+      .footer{fill:#152947;stroke:#4e6d92;stroke-width:1.6}
+      .title{font:700 26px Arial, Helvetica, sans-serif;fill:#ffffff}
+      .subtitle{font:400 16px Arial, Helvetica, sans-serif;fill:#dbe8f7}
+      .boxlabel{font:700 24px Arial, Helvetica, sans-serif;fill:#ffffff}
+      .boxsub{font:400 16px Arial, Helvetica, sans-serif;fill:#dbe8f7}
+      .foot{font:400 16px Arial, Helvetica, sans-serif;fill:#e9f2ff}
+      .arrow{stroke:#a7d9e8;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrowhead)}
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L10,5 L0,10" fill="#a7d9e8"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1280" height="620" rx="28"/>
+  <rect class="panel" x="10" y="10" width="1260" height="600" rx="24"/>
+
+  <text x="44" y="58" class="title">SCC functional architecture</text>
+  <text x="44" y="90" class="subtitle">32-bit Verilog CPU · functional blocks, not a pipelined machine</text>
+
+  <!-- top row -->
+  <rect class="box" x="44" y="142" rx="16" ry="16" width="210" height="116"/>
+  <text x="149" y="190" text-anchor="middle" class="boxlabel">Fetch / PC</text>
+  <text x="149" y="220" text-anchor="middle" class="boxsub">IF + branch target</text>
+
+  <rect class="box" x="302" y="142" rx="16" ry="16" width="210" height="116"/>
+  <text x="407" y="190" text-anchor="middle" class="boxlabel">Decode</text>
+  <text x="407" y="220" text-anchor="middle" class="boxsub">ID + branch control</text>
+
+  <rect class="accent" x="560" y="142" rx="16" ry="16" width="210" height="116"/>
+  <text x="665" y="190" text-anchor="middle" class="boxlabel">Execute</text>
+  <text x="665" y="220" text-anchor="middle" class="boxsub">ALU + control</text>
+
+  <rect class="box" x="818" y="142" rx="16" ry="16" width="210" height="116"/>
+  <text x="923" y="190" text-anchor="middle" class="boxlabel">Memory</text>
+  <text x="923" y="220" text-anchor="middle" class="boxsub">LOAD / STOR</text>
+
+  <rect class="box" x="1076" y="142" rx="16" ry="16" width="148" height="116"/>
+  <text x="1150" y="190" text-anchor="middle" class="boxlabel">Writeback</text>
+  <text x="1150" y="220" text-anchor="middle" class="boxsub">WB + flags</text>
+
+  <!-- bottom row -->
+  <rect class="box" x="304" y="356" rx="16" ry="16" width="300" height="118"/>
+  <text x="454" y="407" text-anchor="middle" class="boxlabel">Architectural registers</text>
+  <text x="454" y="440" text-anchor="middle" class="boxsub">R13 SP · R14=0 · R15=PC</text>
+
+  <rect class="accent" x="696" y="356" rx="16" ry="16" width="252" height="118"/>
+  <text x="822" y="414" text-anchor="middle" class="boxlabel">MUL / DIV</text>
+  <text x="822" y="442" text-anchor="middle" class="boxsub">microcode + datapaths</text>
+
+  <rect class="box" x="972" y="356" rx="16" ry="16" width="232" height="118"/>
+  <text x="1088" y="414" text-anchor="middle" class="boxlabel">PUSH / POP</text>
+  <text x="1088" y="442" text-anchor="middle" class="boxsub">16-word stack</text>
+
+  <!-- arrows top row -->
+  <path class="arrow" d="M254 200 H302"/>
+  <path class="arrow" d="M512 200 H560"/>
+  <path class="arrow" d="M770 200 H818"/>
+  <path class="arrow" d="M1028 200 H1076"/>
+
+  <!-- arrows lower connections -->
+  <path class="arrow" d="M407 258 V356"/>
+  <!-- Route register contribution into lower edge of execute box so it does not cover the Execute label -->
+  <path class="arrow" d="M520 356 V298 H665 V258"/>
+  <path class="arrow" d="M1088 356 V258"/>
+
+  <!-- footer -->
+  <rect class="footer" x="44" y="520" rx="14" ry="14" width="1180" height="72"/>
+  <text x="634" y="548" text-anchor="middle" class="foot">Ordinary instruction path + architectural writeback · instruction fetch stalls during multicycle MUL/DIV</text>
+  <text x="634" y="576" text-anchor="middle" class="foot">Simplified conceptual illustration; use docs/ARCHITECTURE.md and active RTL for signal-level detail</text>
+</svg>

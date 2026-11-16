@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 690" role="img" aria-label="Signed multiplication and division multicycle dataflow showing decode, fetch stall, separate controllers, datapaths, and controlled writeback">
+  <defs>
+    <style>
+      .bg{fill:#071427}
+      .panel{fill:#0a1830}
+      .box{fill:#1c2f4d;stroke:#7aa4cf;stroke-width:2.2}
+      .accent{fill:#184759;stroke:#47d8d0;stroke-width:2.2}
+      .title{font:700 26px Arial, Helvetica, sans-serif;fill:#ffffff}
+      .boxlabel{font:700 24px Arial, Helvetica, sans-serif;fill:#ffffff}
+      .boxsub{font:400 16px Arial, Helvetica, sans-serif;fill:#dbe8f7}
+      .annot{font:400 15px Arial, Helvetica, sans-serif;fill:#eef6ff}
+      .arrow{stroke:#a7d9e8;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrowhead)}
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L10,5 L0,10" fill="#a7d9e8"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1280" height="690" rx="28"/>
+  <rect class="panel" x="10" y="10" width="1260" height="670" rx="24"/>
+
+  <text x="44" y="62" class="title">Signed arithmetic: independent multicycle paths</text>
+
+  <!-- top decode -->
+  <rect class="box" x="460" y="86" rx="16" ry="16" width="360" height="76"/>
+  <text x="640" y="120" text-anchor="middle" class="boxlabel">Instruction decode</text>
+  <text x="640" y="147" text-anchor="middle" class="boxsub">MUL / MULS or DIV / DIVS</text>
+
+  <text x="640" y="190" text-anchor="middle" class="annot">Fetch stalls until execution completes</text>
+
+  <!-- controller row -->
+  <rect class="accent" x="106" y="232" rx="16" ry="16" width="420" height="116"/>
+  <text x="316" y="286" text-anchor="middle" class="boxlabel">MUL controller + ROM</text>
+  <text x="316" y="318" text-anchor="middle" class="boxsub">capture operands · sequence states</text>
+
+  <rect class="accent" x="754" y="232" rx="16" ry="16" width="420" height="116"/>
+  <text x="964" y="286" text-anchor="middle" class="boxlabel">DIV controller + ROM</text>
+  <text x="964" y="318" text-anchor="middle" class="boxsub">capture operands · sequence states</text>
+
+  <!-- datapaths -->
+  <rect class="box" x="106" y="396" rx="16" ry="16" width="420" height="98"/>
+  <text x="316" y="441" text-anchor="middle" class="boxlabel">Signed MUL datapath</text>
+  <text x="316" y="472" text-anchor="middle" class="boxsub">64-bit product</text>
+
+  <rect class="box" x="754" y="396" rx="16" ry="16" width="420" height="98"/>
+  <text x="964" y="441" text-anchor="middle" class="boxlabel">Signed DIV datapath</text>
+  <text x="964" y="472" text-anchor="middle" class="boxsub">quotient + remainder</text>
+
+  <!-- writeback -->
+  <rect class="accent" x="432" y="560" rx="16" ry="16" width="416" height="72"/>
+  <text x="640" y="596" text-anchor="middle" class="boxlabel">Writeback: Rd + R12</text>
+  <text x="640" y="620" text-anchor="middle" class="boxsub">Controlled register + flag updates</text>
+
+  <!-- arrows: decode to controllers, routed from bottom corners to avoid text -->
+  <path class="arrow" d="M540 162 V210 H316 V232"/>
+  <path class="arrow" d="M740 162 V210 H964 V232"/>
+
+  <!-- controller to datapath -->
+  <path class="arrow" d="M316 348 V396"/>
+  <path class="arrow" d="M964 348 V396"/>
+
+  <!-- datapaths to shared writeback path; single clean merge, no crossing arrowheads -->
+  <path class="arrow" d="M316 494 V534 H640 V560"/>
+  <path class="arrow" d="M964 494 V534 H640"/>
+</svg>
