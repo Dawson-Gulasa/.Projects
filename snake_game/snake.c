@@ -226,7 +226,11 @@ void logic()
         }
 
         score += 10;
-        snakeTailLen++;
+        // Stay within the fixed-size tail arrays used by this course prototype.
+        if (snakeTailLen < 100)
+        {
+            snakeTailLen++;
+        }
     }
 
 }
