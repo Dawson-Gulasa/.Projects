@@ -1,0 +1,5 @@
+target/
+*.class
+quiz_results.dat
+.idea/
+.vscode/

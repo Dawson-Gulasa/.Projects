@@ -1,69 +1,56 @@
-# JavaFX Game Show Quiz
+# Geography Game Show Quiz (JavaFX)
 
-## Project Overview
+**Java · JavaFX · Maven · Object-oriented design · CSV resources · Local persistence**
 
-This JavaFX application delivers an interactive geography quiz, dynamically loading questions from a CSV dataset and tracking user performance. It demonstrates object‑oriented design, event‑driven UI, multithreading, file I/O, and integration with JavaFX.
+## Overview
 
-## Prerequisites
+A desktop geography quiz implemented with JavaFX. Each round selects **six unique countries**, asks users to identify their continents, displays immediate feedback, and records score history between sessions. Country/continent mappings are shipped as a CSV resource inside the project; questions and score management use separate Java model classes.
 
-- Java 11 or higher (with JavaFX support)
-- Maven 3.6+ for build and dependency management
+## What it demonstrates
 
-## Directory Structure
+- JavaFX desktop windows, radio-button selection, event callbacks, and timed feedback transitions.
+- Object-oriented modeling across `Country`, `CountryCollection`, `Question`, `Quiz`, `QuizScore`, and `QuizResult`.
+- Data-driven questions loaded from [`country_continent.csv`](src/main/resources/country_continent.csv).
+- Persistence using Java object serialization to **`quiz_results.dat`** in the application's working directory.
+- Maven-based dependency setup and a self-contained Java resource path instead of the original developer-specific absolute path.
 
-```
-javafx_game_show_quiz/
-├── pom.xml
-├── README.md
-├── src/
-│   ├── main/
-│   │   ├── java/edu/uga/cs1302/quiz/
-│   │   │   ├── Country.java
-│   │   │   ├── CountryCollection.java
-│   │   │   ├── GeographyQuiz.java
-│   │   │   ├── Question.java
-│   │   │   ├── Quiz.java
-│   │   │   ├── QuizResult.java
-│   │   │   └── QuizScore.java
-│   │   └── resources/
-│   │       └── country_continent.csv
-│   └── test/
-│       └── java/edu/uga/cs1302/quiz/
-│           └── TestCountryCollection.java
-└── .gitignore
-```
+## Build and run
 
-## Build Instructions
-
-From the project root, run:
+Install **JDK 17** and **Maven**. JavaFX desktop execution also requires a graphical environment; it is not a browser or command-line application.
 
 ```bash
+cd game_show_quiz
 mvn compile
+mvn javafx:run
 ```
 
-## Running the Application
+The [Maven POM](pom.xml) includes JavaFX controls, Apache Commons CSV, and the JavaFX Maven plugin.
 
-Use the Maven Exec plugin:
+A console smoke entry point under `src/test/java/` exercises the CSV-backed country model, but this is not a conventional automated JUnit suite. **Fresh GUI functionality has not been verified in the portfolio edit environment.**
 
-```bash
-mvn exec:java -Dexec.mainClass="edu.uga.cs1302.quiz.GeographyQuiz"
+## Project layout
+
+```text
+game_show_quiz/
+├── pom.xml
+├── src/main/java/edu/uga/cs1302/quiz/  # GUI + domain/data classes
+├── src/main/resources/                 # Portable CSV quiz dataset
+├── src/test/java/                      # Console test entry point
+└── README.md
 ```
 
-## Data & Examples
+### User flow
 
-- `src/main/resources/country_continent.csv`: Source data for quiz questions.
-- Sample quiz outputs are written to `quiz_results.dat` at runtime.
-
-## Git Ignore
-
-Ensure generated files and folders are excluded by adding:
-
-```gitignore
-/target/
-**/*.class
-maven-status/
+```text
+Menu → Six randomized geography questions → Correct/incorrect feedback
+                                   ↓
+                            Score + date recorded
+                                   ↓
+                     View previous local attempts
 ```
 
-## Author
+**Known limitations:** Scores are stored in a local Java serialization file, not a network account/database. JavaFX's runtime availability and native libraries depend on the operating system and JDK. Data and the implementation are shared as a course software example.
 
-Dawson Gulasa
+## Files to inspect
+
+[JavaFX entry point](src/main/java/edu/uga/cs1302/quiz/GeographyQuiz.java) · [Country model/CSV reader](src/main/java/edu/uga/cs1302/quiz/CountryCollection.java) · [Quiz engine](src/main/java/edu/uga/cs1302/quiz/Quiz.java) · [Resources](src/main/resources/country_continent.csv)

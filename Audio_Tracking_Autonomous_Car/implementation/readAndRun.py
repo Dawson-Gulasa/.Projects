@@ -136,7 +136,7 @@ while (time.time() - starttime) < 600:
         sameCommandTime = time.time()
 
     #If valid command is held for 7 seconds, Strobe LEDs and run commmand. 
-    if ((sameCommandTime - time.time()) < -7) and (bitString != "0000") and commandArray[bitString] != calledCommand:
+    if ((sameCommandTime - time.time()) < -7) and (bitString in commandArray) and (bitString != "0000") and commandArray[bitString] != calledCommand:
             print("Command Called! \n" + commandArray[bitString])
             
             #LED's start strobing to indicate program startup.

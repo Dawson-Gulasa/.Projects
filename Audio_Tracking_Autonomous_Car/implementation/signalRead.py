@@ -219,7 +219,7 @@ def checkpointB(fullSpinTime):
 
     driveControls.spinLeft()
     time.sleep(maxTime * 0.96)
-    driveControls.stop
+    driveControls.stop()
 
     #Closing ADC GPIOs
     s1.close()

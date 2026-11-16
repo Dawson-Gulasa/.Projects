@@ -1,0 +1,23 @@
+# Build and editor artifacts (project-specific outputs are kept in their own .gitignore)
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+__pycache__/
+*.py[cod]
+*.class
+target/
+*.exe
+*.obj
+*.o
+*.out
+*.vvp
+*.vcd
+*.jou
+*.log
+*.str
+# Credentials: never commit actual local Wi-Fi or IoT tokens
+secrets.py
+.env
+.env.*
+!.env.example

@@ -1,0 +1,17 @@
+# Generated Vivado products and simulator outputs.
+# Keep source RTL, constraint .xdc files, .xci/.prj IP configurations, and .mem ROMs.
+.Xil/
+*.cache/
+*.runs/
+*.gen/
+*.sim/
+*.hw/
+*.ip_user_files/
+*.jou
+*.log
+*.wdb
+*.vcd
+*.vvp
+*.bit
+*.bin
+*.ltx

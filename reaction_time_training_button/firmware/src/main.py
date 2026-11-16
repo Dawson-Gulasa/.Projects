@@ -144,6 +144,9 @@ addr_list = i2c.scan()
 oled_addr = 0x3C if 0x3C in addr_list else (0x3D if 0x3D in addr_list else 0x3C)
 oled = SSD1306_I2C(128, 64, i2c, addr=oled_addr, external_vcc=False)
 
+# Explicitly initialize the output used by the LED cue / FSM.
+led = Pin(PIN_LED, Pin.OUT)
+
 def oled_msg(lines, box=False):
     oled.fill(0)
     if box: oled.rect(0,0,128,64,1)

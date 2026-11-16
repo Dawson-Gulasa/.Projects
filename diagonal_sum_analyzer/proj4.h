@@ -1,6 +1,7 @@
 #ifndef PROJ4_H
 #define PROJ4_H
 
+#include <stdio.h>  // for FILE in the public writeGridRow prototype
 #include <pthread.h> // for multithreading
 
 /*

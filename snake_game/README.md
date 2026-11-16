@@ -1,71 +1,60 @@
 # Snake Game in C
 
-## Project Overview
+**C · Windows console · Real-time keyboard input · Game-loop programming**
 
-This console-based Snake game is implemented in C for Windows environments. Players control the snake to consume fruits, grow in length, and avoid collisions with walls or the snake’s own tail. The game demonstrates basic game-loop logic, real-time input handling, and dynamic board rendering.
+## Overview
 
-## Prerequisites
+A classic text-mode Snake game implemented in C. The board is refreshed repeatedly while nonblocking key presses control movement; collecting food increases the score and snake length, and wall/body collisions end the session.
 
-- Windows OS
-- C compiler supporting `<conio.h>` and `<windows.h>` (e.g., MinGW GCC or Microsoft Visual C++)
+This is an introductory software project in the **supporting programming** section of the engineering portfolio, preserved as the original Windows console implementation rather than recast as cross-platform hardware work.
 
-## Directory Layout
+## Controls
 
+| Key | Action |
+|---|---|
+| **W** | Up |
+| **A** | Left |
+| **S** | Down |
+| **D** | Right |
+| **X** | Exit |
+
+The code prevents immediate 180° reversals, advances the tail with the head, and updates the console board at approximately **33 ms** intervals using Windows `Sleep`.
+
+## Build and run on Windows
+
+This source uses `<conio.h>`, `<windows.h>`, `kbhit()`, `getch()`, `Sleep()`, and `system("cls")`. It therefore targets Windows and does **not** compile unchanged on Linux/macOS.
+
+**MinGW GCC:**
+
+```powershell
+cd snake_game
+gcc -std=c11 snake.c -o snake.exe
+.\snake.exe
 ```
-snake_game/
-├── snake.c      # Source code for the Snake game
-└── README.md    # Project documentation (this file)
+
+**Visual Studio Developer Command Prompt:**
+
+```bat
+cd snake_game
+cl /W3 snake.c
+snake.exe
 ```
 
-## Building the Game
+## Implementation map
 
-### Using MinGW GCC
+The entire program is [`snake.c`](snake.c). It contains routines for initialization, board printing, keyboard input, movement/collision logic, score/fruit generation, and the fixed-rate game loop.
 
-1. Open Command Prompt and navigate to the `snake_game` directory:
-   ```batch
-   cd path\to\snake_game
-   ```
-2. Compile the source file:
-   ```batch
-   gcc snake.c -o snake.exe
-   ```
+```text
+Initialize board
+     ↓
+Render console → Poll keyboard → Update snake and collision state
+     └───────────────────────────────────────────────┘
+                             ↓
+                          Game over
+```
 
-### Using Microsoft Visual C++ (cl)
+## Notes
 
-1. Open the "Developer Command Prompt for VS" and navigate to the project folder:
-   ```batch
-   cd path\to\snake_game
-   ```
-2. Compile with:
-   ```batch
-   cl snake.c
-   ```
+The implementation is console-based and intentionally simple. It uses a fixed-size tail buffer and does not include a game-over UI or platform abstraction. The portfolio cleanup preserves the game logic, updates the standard C entry point, and seeds the pseudo-random fruit positions on startup. The executable has not been freshly play-tested here.
 
-## Running the Game
-
-1. Run the executable:
-   ```batch
-   snake.exe
-   ```
-2. Controls:
-   - **W**: Move up
-   - **A**: Move left
-   - **S**: Move down
-   - **D**: Move right
-   - **X**: Exit game
-
-3. Objective:
-   - Collect `*` fruits to increase score by 10 and grow the snake.
-   - Avoid colliding with `#` walls or your own `o` tail.
-
-## How It Works
-
-- **Game Loop**: Continuously renders the board, processes input, and updates game logic until a collision or exit command.
-- **Board Rendering**: Uses `system("cls")` to clear the console and prints borders, the snake head (`0`), tail (`o`), and fruit (`*`).
-- **Input Handling**: Non-blocking input via `kbhit()` and `getch()` from `<conio.h>`.
-- **Logic**: Updates snake position, manages tail coordinates, checks for collisions, and respawns fruits at random positions.
-
-## Author
-
-Dawson Gulasa
-
+**Source:** [snake.c](snake.c)

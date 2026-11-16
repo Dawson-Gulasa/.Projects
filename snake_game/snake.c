@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <windows.h>
 
 // define height and width of game screen
@@ -225,14 +226,19 @@ void logic()
         }
 
         score += 10;
-        snakeTailLen++;
+        // Stay within the fixed-size tail arrays used by this course prototype.
+        if (snakeTailLen < 100)
+        {
+            snakeTailLen++;
+        }
     }
 
 }
 
 
-void main()
+int main(void)
 {
+    srand((unsigned int)time(NULL));
     // set up initial gameboard
     setup();
 
@@ -244,5 +250,5 @@ void main()
         logic();
         Sleep(33);
     }
+    return 0;
 }
-
