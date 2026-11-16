@@ -1,29 +1,47 @@
-# Summer Research Assistant Documentation
+# Robotics and Automated Inspection Research
 
-## Overview
+**University of Georgia · Summer 2025 · Dr. Hongyue Sun's research group**
 
-This folder contains the comprehensive research memo that details all aspects of my summer research under Dr. Hongyue Sun in the Robotics Lab at the University of Georgia. The memo serves as a single source of truth, encapsulating:
+**Robot vision · 3D perception · Manipulator integration · Automated inspection · Python**
 
-- Project background, objectives, and methodology  
-- All source code references and architecture diagrams  
-- Demo video links and usage instructions  
-- Analysis results, inspection reports, and metrics  
+## Research overview
 
-## Contents
+Research supporting a robotic inspection workflow that combines **object detection, depth sensing, 3D pose estimation, and manipulator control**. Work included integrating robotic arms such as UR5e/DOBOT, depth and camera processing, object pose/orientation computation, conveyor or scanning workflows, and structured inspection/report generation.
+
+The most useful resource is the original [Research Memo (PDF)](Research_Memo.pdf), which documents the research problem, architecture, experiments, code references, diagrams, and demonstration videos.
+
+## Engineering workflow
 
 ```text
-research_assistant/
-├── Research_Memo.pdf      # Full write‑up with embedded code snippets, schematics, and video links
-└── README.md              # This file
+RGB + depth / scanner input
+              ↓
+Object recognition and geometry extraction
+              ↓
+Point-cloud / PCA-based oriented bounding box
+              ↓
+6D pose estimate and target alignment
+              ↓
+Robot manipulation / scanner data capture
+              ↓
+Inspection output + generated report
 ```
 
-## How to Use
+This is a **research documentation portfolio entry**, not a public source-code release. The original laboratory code and data are not all committed here; the memo provides available context and demonstrations.
 
-1. Open `Research_Memo.pdf` to review the end‑to‑end documentation of the project.  
-2. Follow the embedded sections for code, hardware setup, and demonstration videos.  
+## Skills demonstrated
 
----
+- Python integration across depth processing, vision, robot communications, and automated reporting
+- Geometric analysis and object alignment using PCA/oriented bounding boxes and pose frames
+- Hardware/software integration with robotic manipulator and scanning instrumentation
+- Iterative experiments, documentation, defect/quality-inspection workflow, reproducible reporting
 
-*Author:* Dawson Gulasa  
-*Advised by:* Dr. Hongyue Sun, Robotics Lab, UGA
+## Research outputs and access
 
+- **[Research Memo](Research_Memo.pdf)** — methods, diagrams, development record and video references.
+- **[AutoInspector — NSF Public Access Repository entry](https://par.nsf.gov/biblio/10716809-autoinspector-autonomous-robotic-scanning-framework-quality-inspection)** — user-supplied research record. The associated publication is reported as not publicly accessible until **2027**; link here is a bibliographic pointer, **not a claim that the full paper is currently open access**.
+
+## Credit
+
+The work was conducted in **Dr. Hongyue Sun's University of Georgia research laboratory** and involved academic collaborators and mentors. Dawson contributed to perception/robot integration and inspection workflow engineering. The entire lab framework and any later publication are **collaborative research outputs**, not individual work.
+
+For specifics, research data, and demonstration links, see the [full memo](Research_Memo.pdf). Third-party figures and unpublished artifacts should not be redistributed outside their documented permissions.

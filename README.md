@@ -1,68 +1,64 @@
-# Projects Repository
+# Engineering Project Portfolio
 
-A curated collection of my academic and research projects demonstrating skills in robotics, parallel programming, software development, and embedded systems.
+**Digital hardware · FPGA/RTL · Embedded systems · Circuit design · Robotics**
 
-## Repository Structure
+A curated collection of engineering, academic, and research projects from the University of Georgia. Projects are presented as technical case studies: **the engineering problem, architecture, implementation, verification, and artifacts**. Many were collaborative course or lab projects; team ownership and limitations are described in each project.
+
+![Portfolio engineering banner](media/portfolio_banner.svg)
+
+## Featured digital hardware
+
+| Project | Engineering focus | Explore |
+|---|---|---|
+| **32-bit Single-Cycle Computer (SCC)** | Verilog processor, ISA, microcoded signed MUL/DIV, stack, automated RTL verification | [Processor, source & report](SCC_32bit_Processor/) |
+| **Optimus Prime FPGA** | Nexys A7-100T, multi-clock-domain RTL, DDR2, VGA, SD-card verification, CDC | [FPGA system & demonstrations](Optimus_Prime_FPGA/) |
+
+## Embedded systems & circuit engineering
+
+| Project | Engineering focus | Explore |
+|---|---|---|
+| **Audio-Tracking Autonomous Car** | Raspberry Pi, analog filters, comparators/ADC, motor control, PCB and autonomous motion | [Hardware & controls](Audio_Tracking_Autonomous_Car/) |
+| **Reaction-Time Training Button** | MicroPython, sensors and calibration, PCB/enclosure design, OLED, Wi-Fi telemetry | [Circuit, firmware & media](reaction_time_training_button/) |
+| **Seven-Segment Clock & Timer** | Raspberry Pi GPIO, DFF-latched displays, keypad FSM, timing characterization | [Hardware & timing results](SSD_Clock_Timer/) |
+| **Robotic Inspection Research** | Depth/vision-based localization, robot interfaces, scanning, data processing | [Research documentation](Research_Documentation/) |
+
+## Supporting software projects
+
+| Project | Skills | Explore |
+|---|---|---|
+| **Parallel Diagonal Sum Analyzer** | C, POSIX threads, memory management, sliding-window diagonals | [Source & examples](diagonal_sum_analyzer/) |
+| **Geography Game Show Quiz** | JavaFX, Maven, OOP, CSV resources, persisted quiz results | [Java application](game_show_quiz/) |
+| **Snake Game** | C, console I/O, game loops, input/state logic | [Source & build guide](snake_game/) |
+
+## How the repository is organized
+
+Each project is **self-contained** and links to the relevant source, technical report, demonstrations, and engineering decisions. Where possible, hardware projects include photographs, circuit schematics, or measured results. Code-heavy projects include tested or documented build/run instructions.
 
 ```text
-/
-├── audio_tracking_autonomous_car/        # Autonomous audio-tracking vehicle on Raspberry Pi 4
-├── optimus_prime_fpga/                   # Nexys A7 FPGA system with VGA UI, DDR2, SD card, and prime verification
-├── ssd_clock_timer/                      # Raspberry Pi seven-segment display clock with calibrated software timing
-├── reaction_time_training_button/        # Reaction-time training button system (Pico + sensors + OLED + IoT)
-├── diagonal_sum_analyzer/                # C tool for computing diagonal sums in large matrices (parallelized)
-├── game_show_quiz/                       # JavaFX-based interactive geography quiz application
-├── snake_game/                           # Console-based Snake game implemented in C
-├── Research_Documentation/               # Comprehensive research memo from Summer Research Assistant role
-└── README.md                             # This file
+.Projects/
+├── SCC_32bit_Processor/             # RTL processor + verification + final report
+├── Optimus_Prime_FPGA/              # FPGA RTL, constraints, simulation and media
+├── Audio_Tracking_Autonomous_Car/   # Analog front-end, Pi controls and documentation
+├── reaction_time_training_button/   # MicroPython, PCB/enclosure and hardware media
+├── SSD_Clock_Timer/                 # GPIO clock, experiments and supporting report
+├── Research_Documentation/          # Robotics research memo and demonstrations
+├── diagonal_sum_analyzer/           # Parallel C algorithm and sample cases
+├── game_show_quiz/                  # JavaFX/Maven application
+├── snake_game/                      # Console game in C
+└── media/                           # Portfolio banner
 ```
 
-## Getting Started
+### Clone and explore
 
-To explore any project:
+```bash
+git clone https://github.com/Dawson-Gulasa/.Projects.git
+cd .Projects
+```
 
-1. **Clone this repository**:
-   ```bash
-   git clone https://github.com/yourusername/Projects.git
-   cd Projects
-   ```
-2. **Navigate** into the project directory of interest, for example:
-   ```bash
-   cd diagonal_sum_analyzer
-   ```
-3. **Follow that project’s** README for build, run, and usage instructions.
-
-## Projects at a Glance
-
-### Featured: 32-bit Verilog SCC Processor
-
-**[Explore the SCC processor project](SCC_32bit_Processor/)** — Custom 32-bit processor with register/ALU/branch logic, microcoded signed multiplication and division, 16-word PUSH/POP stack, and automated Icarus Verilog verification. Final CP6 submission: **20/20 internal regression tests** and **9/9 deliberately injected faults detected**.
-
-
-- **audio_tracking_autonomous_car/**  
-  Python-driven Raspberry Pi vehicle that seeks specified audio frequencies and executes navigational maneuvers.
-  
-- **optimus_prime_fpga/**  
-  Verilog-based Nexys A7 FPGA system featuring four prime-computation modes, a mouse/keypad-controlled VGA interface, DDR2 framebuffer and prime storage, SD-card verification, multiple clock domains, and self-checking RTL testbenches.
-
-- **ssd_clock_timer/**  
-  Raspberry Pi–driven multi-mode clock (IDLE/AUTO/MANUAL) built on DFF-latched seven-segment displays and a matrix keypad, featuring a custom calibrated busy-loop timing function benchmarked against time.sleep() over a 2-hour accuracy test.
-
-- **reaction_time_training_button/**  
-  Battery-powered reaction-time training system using a Raspberry Pi Pico, FSR-based input, SSD1306 OLED UI, and optional ThingSpeak uploads for logging/leaderboard use.  
-
-- **diagonal_sum_analyzer/**  
-  Performance-optimized C program using pthreads and sliding-window algorithms to compute main and secondary diagonal sums of \(n\times n\) matrices.  
-
-- **game_show_quiz/**  
-  JavaFX application presenting a geography quiz sourced from a CSV dataset, complete with scoring and persistence.  
-
-- **snake_game/**  
-  Classic console-based Snake game in C showcasing real-time input handling and game-loop design.  
-
-- **research_assistant/**  
-  Full research documentation (Summer 2025) for robotics lab work under Dr. Hongyue Sun, encapsulating code references, design rationale, and demo links.  
+Open any project folder and follow its README. FPGA/PCB and Raspberry Pi projects may require specific hardware, IP, operating systems, or instrumentation; they are shared to **demonstrate design and engineering methodology**, not as guaranteed plug-and-play products. Reported results were recorded during the original projects unless otherwise stated.
 
 ---
 
-*For more details, open the README in each subdirectory. Feel free to reach out via GitHub issues or pull requests.*
+**About this collection:** Focused on **digital hardware, PCB/circuit design, embedded systems, and hardware-software integration**. Newer projects and a standalone portfolio website will be added separately.
+
+For team-authored coursework, course-provided assets, and research contributions, refer to each project's documentation. Do not redistribute third-party reference material under an assumed blanket license.

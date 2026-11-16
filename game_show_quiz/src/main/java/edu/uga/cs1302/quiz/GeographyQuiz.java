@@ -24,7 +24,7 @@ public class GeographyQuiz extends Application
 	countryCollection = new CountryCollection();
 	try
 	    {
-		countryCollection.readFromCSV("/home/myid/djg58388/cs1302/project5/src/main/resources/country_continent.csv");
+		countryCollection.readFromResource("country_continent.csv");
 	    }catch(Exception e)
 	    {
 		e.printStackTrace();
