@@ -26,7 +26,7 @@
   <text x="640" y="120" text-anchor="middle" class="boxlabel">Instruction decode</text>
   <text x="640" y="147" text-anchor="middle" class="boxsub">MUL / MULS or DIV / DIVS</text>
 
-  <text x="640" y="190" text-anchor="middle" class="annot">Fetch stalls until execution completes</text>
+  <text x="640" y="663" text-anchor="middle" class="annot">Fetch stalls until execution completes</text>
 
   <!-- controller row -->
   <rect class="accent" x="106" y="232" rx="16" ry="16" width="420" height="116"/>
