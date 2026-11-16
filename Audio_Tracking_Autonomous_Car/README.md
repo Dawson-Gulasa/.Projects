@@ -2,6 +2,10 @@
 
 **Raspberry Pi · Analog signal conditioning · Active filters · Comparator ADC · Motor control · PCB design**
 
+<img src="media/photos/car_prototype.jpg" alt="Original Group 11 two-wheel audio-tracking car prototype on the electronics lab bench" width="420">
+
+*Original course prototype, including a breadboarded circuit and Raspberry Pi hardware.*
+
 ![Audio tracking system block diagram](media/signal_chain.svg)
 
 ## Project overview
@@ -51,6 +55,14 @@ The [main mode-dispatch script](implementation/readAndRun.py) monitors a DIP swi
 - **Debug / manual tests:** calibrate sensor readings and inspect GPIO/motor subsystems.
 
 The source implements a **7-second stable-mode confirmation** and a finite experiment window. Because the physical prototype used an experimental tether, fixed turning and stopping behavior is specific to the original test surface and vehicle.
+
+## Hardware design gallery
+
+The three figures below are cropped from the [Group 11 technical documentation](docs/Technical%20Documentation%20-%20Group%2011.pdf) and show the team's **design artifacts**, not proof that a fabricated PCB was installed on the pictured prototype.
+
+| Circuit schematic | PCB routing and layout | PCB 3D design render |
+|---|---|---|
+| ![Group 11 consolidated circuit schematic](media/pcb_schematic.png) | ![Audio car PCB layout screenshot](media/pcb_layout.png) | ![Audio car PCB 3D rendering](media/pcb_3d_render.png) |
 
 ## Demonstrations and artifacts
 
