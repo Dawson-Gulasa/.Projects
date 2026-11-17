@@ -4,6 +4,10 @@
 
 **Robot vision · 3D perception · Manipulator integration · Automated inspection · Python**
 
+![Robotic inspection research laboratory setup](media/robotic_inspection_lab.png)
+
+*Research laboratory setup with robotic manipulators and scanning equipment.*
+
 ## Research overview
 
 Research supporting a robotic inspection workflow that combines **object detection, depth sensing, 3D pose estimation, and manipulator control**. Work included integrating robotic arms such as UR5e/DOBOT, depth and camera processing, object pose/orientation computation, conveyor or scanning workflows, and structured inspection/report generation.

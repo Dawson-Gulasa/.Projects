@@ -2,6 +2,10 @@
 
 **C · Windows console · Real-time keyboard input · Game-loop programming**
 
+![Snake gameplay example](media/snake_terminal.png)
+
+*Console gameplay image supplied for the portfolio. The published source uses WASD and X to exit; on-screen controls in the image may reflect a different revision.*
+
 ## Overview
 
 A classic text-mode Snake game implemented in C. The board is refreshed repeatedly while nonblocking key presses control movement; collecting food increases the score and snake length, and wall/body collisions end the session.

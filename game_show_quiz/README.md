@@ -6,6 +6,10 @@
 
 A desktop geography quiz implemented with JavaFX. Each round selects **six unique countries**, asks users to identify their continents, displays immediate feedback, and records score history between sessions. Country/continent mappings are shipped as a CSV resource inside the project; questions and score management use separate Java model classes.
 
+![Geography quiz concept illustration](media/geography_quiz_concept.svg)
+
+*Concept visualization of the quiz flow. The actual interface is implemented in JavaFX.*
+
 ## What it demonstrates
 
 - JavaFX desktop windows, radio-button selection, event callbacks, and timed feedback transitions.
