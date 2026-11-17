@@ -4,7 +4,7 @@
 
 **Verilog · FPGA · DDR2/MIG · VGA · PS/2 · SPI/SD · Clock-domain crossing · RTL testbenches**
 
-![Prime engine results screen](media/screenshots/results.PNG)
+![Optimus Prime FPGA main menu](media/screenshots/main_menu_updated.png)
 
 ## At a glance
 
@@ -66,7 +66,7 @@ The SD path streams ASCII-encoded reference data through byte synchronization, p
 
 | Main menu | Generating primes |
 |---|---|
-| ![Main menu](media/screenshots/main_menu.PNG) | ![Generation display](media/screenshots/generating.PNG) |
+| ![Main menu](media/screenshots/main_menu_updated.png) | ![Generation display](media/screenshots/generating.PNG) |
 | **Results** | **Test Mode** |
 | ![Results](media/screenshots/results.PNG) | ![SD-card verification screen](media/screenshots/test_mode.PNG) |
 

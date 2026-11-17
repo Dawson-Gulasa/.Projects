@@ -8,6 +8,10 @@ A command-line C tool that searches a square grid for **contiguous segments on d
 
 This is more than calculating the two full main-diagonal totals. The original README described the functionality incorrectly; this revised version follows the actual [`main.c`](main.c), [`proj4.c`](proj4.c) and [`proj4.h`](proj4.h).
 
+![Parallel diagonal computation illustration](media/parallel_diagonal_concept.svg)
+
+*Concept visualization of parallel diagonal scanning; original program runs in the terminal.*
+
 ## Engineering highlights
 
 - Dynamically allocates 2D grid storage from a digit-grid input file and releases it after use.
